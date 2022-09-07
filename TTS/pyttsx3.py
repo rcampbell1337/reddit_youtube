@@ -13,5 +13,6 @@ def pyttsx3_text_to_speech(things_to_say: str):
 
     for thing_to_say in things_to_say:
         converter.say(thing_to_say)
+        print(thing_to_say)
 
     converter.runAndWait()
