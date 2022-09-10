@@ -1,7 +1,7 @@
 import pyttsx3
 
 
-def pyttsx3_text_to_speech(things_to_say: str):
+def pyttsx3_text_to_speech(things_to_say: str) -> None:
     converter = pyttsx3.init()
 
     converter.setProperty('rate', 250)
