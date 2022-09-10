@@ -20,16 +20,20 @@ class ScreenDimensions:
 
 def store_web_image(url: str) -> None:
     driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
-    driver.get("https://www.reddit.com/r/teenagers/comments/xa6rv4/how_do_i_talk_to_a_girl_with_0_context/")
+    driver.get(url)
+
     wait_for_element(driver=driver,
                      xpath='//*[@id="AppRouter-main-content"]/div/div[1]/div/div/div[2]/button',
                      click=True)
+
     wait_for_element(driver=driver,
                      xpath='/html/body/div[1]/div/div[2]/div[2]/div/div/div/div[2]/div[3]/div[1]/div[2]'
                            '/div[1]/div/div[5]/div/div',
                      click=True)
+
     title = wait_for_element(driver=driver,
                              xpath='/html/body/div[1]/div/div[2]/div[2]/div/div/div/div[2]/div[3]/div[1]/div[2]/div[1]')
+
     set_window_focus(driver, title, "test.png")
     driver.quit()
 
@@ -37,9 +41,12 @@ def store_web_image(url: str) -> None:
 def wait_for_element(driver: webdriver, xpath: str, click=False) -> WebElement:
     try:
         element = WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.XPATH, xpath)))
+
         return element if not click else element.click()
+
     except NoSuchElementException and TimeoutException:
         print(f"Could not find an element with the XPATH: {xpath}.")
+
         return None
 
 
