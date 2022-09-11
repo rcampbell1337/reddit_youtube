@@ -9,6 +9,6 @@ def generate_youtube_api_url(params: list) -> str:
 
 
 def get_first_yt_video() -> str:
-    youtube_video_list = requests.get(generate_youtube_api_url(["gta", "4", "background"])).json()
+    youtube_video_list = requests.get(generate_youtube_api_url(["minecraft", "background"])).json()
     first_video_id = youtube_video_list["items"][random.randint(0, len(youtube_video_list))]["id"]["videoId"]
     return f"https://www.youtube.com/watch?v={first_video_id}"

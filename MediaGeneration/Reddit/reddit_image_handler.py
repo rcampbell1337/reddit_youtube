@@ -18,7 +18,7 @@ class ScreenDimensions:
     height: int
 
 
-def store_web_image(url: str) -> None:
+def store_web_image(url: str, relative_path: str) -> None:
     driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
     driver.get(url)
 
@@ -34,14 +34,15 @@ def store_web_image(url: str) -> None:
     title = wait_for_element(driver=driver,
                              xpath='/html/body/div[1]/div/div[2]/div[2]/div/div/div/div[2]/div[3]/div[1]/div[2]/div[1]')
 
-    set_window_focus(driver, title, "./video_images/title.png")
+    set_window_focus(driver, title, f"{relative_path}/Images/title.png")
 
-    for main_comment in range(0, 3):
-        comment = wait_for_element(driver=driver,
-                                   xpath='//div[@style="padding-left:16px"]',
-                                   multiple=True)[main_comment]
+    comments = wait_for_element(driver=driver,
+                                xpath='//div[@style="padding-left:16px"]',
+                                multiple=True)
 
-        set_window_focus(driver, comment, f"./video_images/{main_comment}.png")
+    [set_window_focus(driver, comment, f"{relative_path}/Images/{index}.png")
+        for index, comment
+        in enumerate(comments[:3])]
 
     driver.quit()
 
@@ -60,7 +61,11 @@ def wait_for_element(driver: webdriver, xpath: str, click=False, multiple=False)
 def set_window_focus(driver: webdriver, element: WebElement, path: str) -> None:
     x, y = element.location.values()
     height, width = element.size.values()
-    driver.execute_script(f"window.scrollTo(0, {y - 49})")  # 49px accounts for the navigation bar in reddit
+    # 49px accounts for the navigation bar in reddit
+    driver.execute_script(f"window.scrollTo(0, {y - 49})")
+
+    # Let the data render on the webpage
+    driver.implicitly_wait(5)
     driver.save_screenshot(path)
     crop_focused_area(x, y, width, height, path)
 
