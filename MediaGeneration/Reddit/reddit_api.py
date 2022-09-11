@@ -23,9 +23,8 @@ class Post:
 
 
 class RedditApi:
-    def __init__(self, subreddit: str, relative_path: str):
+    def __init__(self, subreddit: str):
         self.reddit_instance = self.connect_to_reddit_api()
-        self.relative_path = relative_path
         self.subreddit = subreddit
         self.post_info = self.get_post_information()
 
@@ -47,7 +46,7 @@ class RedditApi:
         return reddit
 
     def get_post_information(self) -> Post:
-        submission = next(self.reddit_instance.subreddit(self.subreddit).top(time_filter="day"))
+        submission = next(self.reddit_instance.subreddit(self.subreddit).top(time_filter="week"))
         comments = [Comment(author=comment.author,
                             body=comment.body,
                             score=comment.score) for comment in submission.comments[:3]]
@@ -62,7 +61,7 @@ class RedditApi:
         return post
 
     def store_images_of_title_and_top_three_comments(self) -> None:
-        store_web_image(self.get_reddit_page_url(self.post_info), self.relative_path)
+        store_web_image(self.get_reddit_page_url(self.post_info))
 
     def get_reddit_page_url(self, post: Post) -> str:
         return f"https://www.reddit.com/r/{self.subreddit}/comments/{post.id}"

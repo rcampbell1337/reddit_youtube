@@ -1,8 +1,9 @@
 from pytube import YouTube
 from MediaGeneration.Youtube.youtube_api import get_first_yt_video
+from definitions import MEDIA_URL
 
 
-def store_youtube_video(relative_path: str) -> None:
+def store_youtube_video() -> None:
     yt = YouTube(get_first_yt_video())
     youtube_video = yt.streams.filter(progressive=True, file_extension='mp4')\
                       .order_by('resolution')\
@@ -13,6 +14,6 @@ def store_youtube_video(relative_path: str) -> None:
 
     if youtube_video.filesize_approx > gigabyte:
         print("File was too big for storage.")
-        return store_youtube_video(relative_path=relative_path)
+        return store_youtube_video()
 
-    youtube_video.download(output_path=f"{relative_path}/Videos", filename="video.mp4")
+    youtube_video.download(output_path=f"{MEDIA_URL}/Videos", filename="video.mp4")
