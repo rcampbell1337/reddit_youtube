@@ -12,15 +12,11 @@ from definitions import MEDIA_URL
 import time
 
 
-@dataclass
-class ScreenDimensions:
-    x: int
-    y: int
-    width: int
-    height: int
-
-
-def store_web_image(url: str) -> None:
+def store_post_images(url: str) -> None:
+    """
+    Stores a set of images for a given post in Reddit.
+    :param url: The url to the post.
+    """
     driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
     driver.get(url)
 
@@ -50,6 +46,14 @@ def store_web_image(url: str) -> None:
 
 
 def wait_for_element(driver: webdriver, xpath: str, click=False, multiple=False):
+    """
+    Waits for a webdriver element and throws non-fatal error if it cannot be found.
+    :param driver: The webdriver.
+    :param xpath: The xpath to the desired element.
+    :param click: Whether or not the element should be clicked.
+    :param multiple: Whether or not there are multiple elements.
+    :return None if the element cannot be found or should be clicked; The element if it does not need to be clicked.
+    """
     try:
         element = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, xpath))) if not multiple \
             else WebDriverWait(driver, 10).until(EC.presence_of_all_elements_located((By.XPATH, xpath)))
@@ -61,6 +65,12 @@ def wait_for_element(driver: webdriver, xpath: str, click=False, multiple=False)
 
 
 def set_window_focus(driver: webdriver, element: WebElement, path: str) -> None:
+    """
+    Sets the window focus on the webpage to take an image of a given comment.
+    :param driver: The webdriver.
+    :param element: The element to scope to.
+    :param path: The path to the saved image.
+    """
     x, y = element.location.values()
     height, width = element.size.values()
 
@@ -69,11 +79,18 @@ def set_window_focus(driver: webdriver, element: WebElement, path: str) -> None:
 
     # Let the data render on the webpage
     time.sleep(1)
+    crop_focused_area(x, width, height, path)
     driver.save_screenshot(path)
-    crop_focused_area(x, y, width, height, path)
 
 
-def crop_focused_area(x, y, width, height, path):
+def crop_focused_area(x, width, height, path) -> None:
+    """
+    Crops the image to the desired focus area.
+    :param x: The x pos.
+    :param width: The width of the area.
+    :param height: The height of the area.
+    :param path: The path to the image to be cropped.
+    """
     image = Image.open(path)
     crop_rectangle = (x, 49, width + x, height + 49)
     cropped_image = image.crop(crop_rectangle)

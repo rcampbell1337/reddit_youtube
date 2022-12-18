@@ -164,3 +164,4 @@ cython_debug/
 
 OutputFiles/
 output_video/
+venv/
