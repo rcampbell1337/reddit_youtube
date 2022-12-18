@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from typing import List
-from MediaGeneration.Reddit.reddit_image_handler import store_web_image
+from MediaGeneration.Reddit.reddit_image_handler import store_post_images
 from decouple import config
 import praw
 
@@ -82,7 +82,7 @@ class RedditApi:
         Stores the images of the top three Reddit Comments.
         :return: None.
         """
-        store_web_image(self.get_reddit_page_url(self.post_info))
+        store_post_images(self.get_reddit_page_url(self.post_info))
 
     def get_reddit_page_url(self, post: Post) -> str:
         """

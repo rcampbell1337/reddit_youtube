@@ -1,5 +1,5 @@
 from pytube import YouTube
-from MediaGeneration.Youtube.youtube_api import get_first_yt_video
+from MediaGeneration.Youtube.youtube_api import get_random_yt_video
 from definitions import MEDIA_URL
 
 
