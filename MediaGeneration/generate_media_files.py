@@ -4,6 +4,10 @@ from MediaGeneration.Youtube.youtube_downloader import store_youtube_video
 
 
 def generate_and_save_media_files(subreddit: str):
+    """
+    Manual step to create all of the necessary content for a video.
+    :param subreddit: The subreddit to search for the content of.
+    """
     ask_reddit_link = RedditApi(subreddit=subreddit)
     ask_reddit_link.store_images_of_title_and_top_three_comments()
     store_youtube_video()

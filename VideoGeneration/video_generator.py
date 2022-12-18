@@ -8,11 +8,20 @@ from definitions import MEDIA_URL, ROOT_DIR
 
 @dataclass
 class ImageAudioPair:
+    """
+    Dataclass representing an Image Audio Pair (For moviepy).
+    """
     image: str
     audio: str
 
 
 def split_video_clips_into_mp3_sized_chunks(image_audio_pair: List[ImageAudioPair], full_clip: VideoFileClip):
+    """
+    Splits all of the generated video clips into the size of the given MP3 Files.
+    :param image_audio_pair: A given video clip.
+    :param full_clip: The background video clip.
+    :return: All of the video clips.
+    """
     total_length: int = 0
     video_clips = []
     for pair in image_audio_pair:
@@ -27,6 +36,9 @@ def split_video_clips_into_mp3_sized_chunks(image_audio_pair: List[ImageAudioPai
 
 
 def generate_youtube_video():
+    """
+    Creates a youtube video from the generated files.
+    """
     clip = VideoFileClip(f"{MEDIA_URL}\\Videos\\video.mp4", audio=False)
 
     image_audio_pairs = [

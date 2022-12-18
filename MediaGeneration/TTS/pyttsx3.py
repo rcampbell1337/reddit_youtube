@@ -7,6 +7,10 @@ from pydub import AudioSegment
 
 
 def pyttsx3_text_to_speech(things_to_say: List[str]) -> None:
+    """
+    Converts text content into an MP3 TTS file.
+    :param things_to_say: A list of things to be converted to MP3 format.
+    """
     converter = pyttsx3.init()
 
     converter.setProperty('rate', 175)
@@ -26,13 +30,28 @@ def pyttsx3_text_to_speech(things_to_say: List[str]) -> None:
 
 
 def format_audio_file(converter: Engine, text_content: str, path: str) -> None:
+    """
+    Formats an audio file into a MP3 File.
+    :param converter: The converter engine.
+    :param text_content: The text content to be converted.
+    :param path: The path to save the file to.
+    """
     converter.save_to_file(text_content, path)
     converter.runAndWait()
 
 
-def get_audio_file_duration(path: str):
+def get_audio_file_duration(path: str, retries = 0) -> int:
+    """
+    Gets the duration of a given audio file.
+    :param path: The path to the audio file.
+    :param retries: The number of times this has been attempted.
+    :return: The length of the audio file.
+    """
     try:
         return AudioSegment.from_wav(path).duration_seconds
     except FileNotFoundError:
-        print(f"Trying again with path {path}...")
-        get_audio_file_duration(path)
+        if retries > 5:
+            raise FileNotFoundError("Could not find the file specified.")
+
+        print(f"Could not find file, trying again with path {path}...")
+        get_audio_file_duration(path, retries + 1)
