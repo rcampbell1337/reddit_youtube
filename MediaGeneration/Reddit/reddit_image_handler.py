@@ -113,7 +113,7 @@ def crop_focused_area_and_save(x: int, width: int, height: int, path: str) -> No
     cropped_image: Image = image.crop(crop_rectangle)
     image_width: int = cropped_image.width
     change_percentage = 1080 / image_width
-    resized_image = cropped_image.resize((1000, int(cropped_image.height * (change_percentage + 0.5))))
+    resized_image = cropped_image.resize((1080, int(cropped_image.height * (change_percentage * 2))))
 
     Logger.info(f"Successfully cropped and resized image, attempting to save to: {path}")
 

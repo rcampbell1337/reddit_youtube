@@ -19,7 +19,7 @@ class ImageAudioPair:
     audio: str
 
 
-def split_video_clips_into_mp3_sized_chunks(image_audio_pair: List[ImageAudioPair], full_clip: VideoFileClip) -> list[CompositeVideoClip]:
+def split_video_clips_into_mp3_sized_chunks(image_audio_pair: List[ImageAudioPair], full_clip: VideoFileClip, outro: VideoFileClip) -> list[CompositeVideoClip]:
     """
     Splits all of the generated video clips into the size of the given MP3 Files.
     :param image_audio_pair: A given video clip.
@@ -38,7 +38,7 @@ def split_video_clips_into_mp3_sized_chunks(image_audio_pair: List[ImageAudioPai
         split_video_clip = full_clip.subclip(total_length, total_length + audio_clip_length)
         split_video_clip.audio = audio_clip
 
-        image_clip = ImageClip(pair.image).set_position('center').set_duration(audio_clip_length)
+        image_clip = ImageClip(pair.image).set_position(('center', 200)).set_duration(audio_clip_length)
         video_clips.append(CompositeVideoClip([split_video_clip, image_clip]))
 
         total_length += audio_clip_length
@@ -56,11 +56,13 @@ def generate_youtube_video():
     Logger.info(f"Entering {generate_youtube_video.__name__}")
 
     clip: VideoFileClip = VideoFileClip(f"{MEDIA_URL}\\Videos\\video.mp4", audio=False)
+    outro: VideoFileClip = VideoFileClip(f"{MEDIA_URL}\\Videos\\Outro.mp4", audio=False)
+    outro = outro.resize((1080, 1920))
 
     Logger.info(f"Resizing the main clip...")
 
     (w, h) = clip.size
-    cropped_clip = crop(clip, width=600, height=720, x_center=w/2, y_center=h/2)
+    cropped_clip = crop(clip, width=700, height=720, x_center=w/2, y_center=h/2)
     resized_clip = cropped_clip.resize((1080, 1920)).subclip(15)
 
     Logger.info(f"Clip successfully resized.")
@@ -72,12 +74,12 @@ def generate_youtube_video():
 
     image_audio_pairs.extend([ImageAudioPair(image=f"{MEDIA_URL}\\Images\\{x}.png", audio=f"{MEDIA_URL}\\MP3s\\{x}.wav") for x in range(0, 2)])
 
-    video_clip_list = split_video_clips_into_mp3_sized_chunks(image_audio_pairs, resized_clip)
+    video_clip_list = split_video_clips_into_mp3_sized_chunks(image_audio_pairs, resized_clip, outro)
 
     Logger.info(f"Attempting to concatenate videos...")
 
     final_cut = concatenate_videoclips(video_clip_list)
-
+    final_cut = concatenate_videoclips([final_cut, outro])
 
     song_choice = choice(get_all_music_files())
     Logger.info(f"Attempting to add background music with song: {song_choice}")
