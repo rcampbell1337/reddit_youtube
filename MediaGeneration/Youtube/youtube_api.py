@@ -35,3 +35,9 @@ def get_random_yt_video() -> str:
     Logger.info(f"Formatted API response into a link for download.")
 
     return video_link
+
+def upload_video_to_youtube(video_path: str) -> None:
+    """
+    Uploads a generated video to Youtube.
+    :param: video_path The path to the generated youtube video.
+    """

@@ -21,6 +21,7 @@ def store_post_images(url: str) -> None:
 
     driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
     driver.get(url)
+    driver.set_window_size(600, 800)
 
     Logger.info(f"Attempting to remove cookies etc...")
 
@@ -50,7 +51,7 @@ def store_post_images(url: str) -> None:
     driver.quit()
 
 
-def wait_for_element(driver: webdriver, xpath: str, click=False, multiple=False):
+def wait_for_element(driver: webdriver, xpath: str, click=False, multiple=False, retries=0):
     """
     Waits for a webdriver element and throws non-fatal error if it cannot be found.
     :param driver: The webdriver.
@@ -60,13 +61,22 @@ def wait_for_element(driver: webdriver, xpath: str, click=False, multiple=False)
     :return None if the element cannot be found or should be clicked; The element if it does not need to be clicked.
     """
     Logger.info(f"Entering {wait_for_element.__name__}")
+    if retries > 3:
+        Logger.critical("Something has gone very wrong; throwing new exception...")
+        raise Exception("Program has crashed.")
+
     try:
         element = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, xpath))) if not multiple \
             else WebDriverWait(driver, 10).until(EC.presence_of_all_elements_located((By.XPATH, xpath)))
         
         Logger.info(f"Successfully found element with XPATH: {xpath}")
-
-        return element if not click else element.click()
+        if not click:
+            return element 
+        try:
+            element.click()
+        except Exception as ex:
+            Logger.warning("Something went wrong when trying to click the element; Retrying...", ex.message)
+            wait_for_element(driver, xpath, click, multiple, retries + 1)
 
     except NoSuchElementException and TimeoutException:
         Logger.warning(f"Could not find an element with the XPATH: {xpath}.")
@@ -113,7 +123,7 @@ def crop_focused_area_and_save(x: int, width: int, height: int, path: str) -> No
     cropped_image: Image = image.crop(crop_rectangle)
     image_width: int = cropped_image.width
     change_percentage = 1080 / image_width
-    resized_image = cropped_image.resize((1080, int(cropped_image.height * (change_percentage * 2))))
+    resized_image = cropped_image.resize((1080, int(cropped_image.height * (change_percentage))))
 
     Logger.info(f"Successfully cropped and resized image, attempting to save to: {path}")
 
