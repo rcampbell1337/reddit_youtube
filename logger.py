@@ -12,6 +12,12 @@ class LoggerFacade:
         Initializes logger and sets config.
         """
         self.logger: Logger = logging.getLogger()
+        file = "./logs/logfile.txt"
+        
+        # Clear the file before running...
+        with open("./logs/logfile.txt") as f:
+            f.truncate(0)
+
         filehandler = logging.FileHandler(f"./logs/logfile.txt", "a")
         formatter = logging.Formatter('%(asctime)-15s::%(levelname)s::%(filename)s::%(funcName)s::%(lineno)d::%(message)s')
         filehandler.setFormatter(formatter)

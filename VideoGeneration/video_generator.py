@@ -28,7 +28,7 @@ def split_video_clips_into_mp3_sized_chunks(image_audio_pair: List[ImageAudioPai
     total_length: int = 0
     video_clips = []
     for index, pair in enumerate(image_audio_pair):
-        Logger.info(f"Appending {index}/{len(image_audio_pair)} clips...")
+        Logger.info(f"Appending {index}/{len(image_audio_pair) - 1} clips...")
         audio_clip_length = get_audio_file_duration(pair.audio)
         audio_clip = AudioFileClip(pair.audio)
 
@@ -40,7 +40,7 @@ def split_video_clips_into_mp3_sized_chunks(image_audio_pair: List[ImageAudioPai
 
         total_length += audio_clip_length
 
-        written_index_value = {str(index) + {1: 'st', 2: 'nd', 3: 'rd'}.get(4 if 10 <= index % 100 < 20 else index % 10, "th")}
+        written_index_value = str(index) + {1: 'st', 2: 'nd', 3: 'rd'}.get(4 if 10 <= index % 100 < 20 else index % 10, "th")
         Logger.info(f"Successfully appended {written_index_value} file.")
 
     return video_clips
