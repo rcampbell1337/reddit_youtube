@@ -11,7 +11,7 @@ def generate_youtube_api_url(params: list) -> str:
     """
     Logger.info(f"Entering {generate_youtube_api_url.__name__}")
 
-    return f"https://www.googleapis.com/youtube/v3/search?q={['%20'.join(param for param in params)]}t&maxResults=5" \
+    return f"https://www.googleapis.com/youtube/v3/search?q={['%20'.join(param for param in params)]}t&maxResults=50" \
            f"&key={config('YOUTUBE_API_KEY')}"
 
 
