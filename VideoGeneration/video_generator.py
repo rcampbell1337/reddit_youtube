@@ -72,4 +72,4 @@ def generate_youtube_video():
     Logger.info(f"Attempting to concatenate videos...")
 
     concatenate_videoclips(video_clip_list)\
-        .write_videofile(f"{ROOT_DIR}\\VideoGeneration\\output_video\\{date.today()}.mp4", codec='libx264')
+        .write_videofile(f"{ROOT_DIR}\\OutputFiles\\GeneratedVideos\\{date.today()}.mp4", codec='libx264')

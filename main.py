@@ -1,3 +1,4 @@
+from MediaGeneration.TTS.pyttsx3 import trial_voices
 from MediaGeneration.generate_media_files import generate_and_save_media_files
 from VideoGeneration.video_generator import generate_youtube_video
 

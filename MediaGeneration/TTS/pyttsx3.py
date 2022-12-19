@@ -18,7 +18,7 @@ def pyttsx3_text_to_speech(things_to_say: List[str]) -> None:
     converter.setProperty('rate', 175)
     converter.setProperty('volume', 0.7)
     converter.setProperty('voice',
-                          'HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Speech\Voices\Tokens\TTS_MS_EN-GB_GEORGE_11.0')
+                          'HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Speech\Voices\Tokens\TTS_MS_EN-US_ZIRA_11.0')
 
     Logger.info("Attempting to convert files to mp3...")
 
@@ -31,6 +31,17 @@ def pyttsx3_text_to_speech(things_to_say: List[str]) -> None:
         format_audio_file(converter, things_to_say[0], os.path.abspath(f"{MEDIA_URL}\\MP3s\\title.wav"))
 
     Logger.info("Successfully converted files to mp3.")
+
+def trial_voices():
+    engine = pyttsx3.init()
+    voices = engine.getProperty('voices')
+    for voice in voices:
+        print(voice, voice.id)
+        engine.setProperty('voice', voice.id)
+        engine.say("Hello World!")
+        engine.runAndWait()
+        engine.stop()
+
 
 
 def format_audio_file(converter: Engine, text_content: str, path: str) -> None:
