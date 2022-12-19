@@ -1,4 +1,5 @@
 import logging
+import sys
 from singleton import Singleton
 
 @Singleton
@@ -16,6 +17,7 @@ class LoggerFacade:
         filehandler.setFormatter(formatter)
         self.logger.addHandler(filehandler)
         self.logger.setLevel(logging.INFO)
+        self.logger.addHandler(logging.StreamHandler(sys.stdout))
 
     def info(self, msg: str):
         """
