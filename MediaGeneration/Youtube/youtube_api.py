@@ -11,7 +11,7 @@ def generate_youtube_api_url(params: list) -> str:
     """
     Logger.info(f"Entering {generate_youtube_api_url.__name__}")
 
-    return f"https://www.googleapis.com/youtube/v3/search?q={['%20'.join(param for param in params)]}t&maxResults=25" \
+    return f"https://www.googleapis.com/youtube/v3/search?q={['%20'.join(param for param in params)]}t&maxResults=50" \
            f"&key={config('YOUTUBE_API_KEY')}"
 
 
@@ -21,8 +21,9 @@ def get_random_yt_video() -> str:
     :return: A random Youtube video from the API Response.
     """
     Logger.info(f"Entering {get_random_yt_video.__name__}")
+
     try: 
-        youtube_video_list = requests.get(generate_youtube_api_url(["minecraft", "background"])).json()
+        youtube_video_list = requests.get(generate_youtube_api_url(["smash", "ultimate", "sick", "combos"])).json()
     except:
         Logger.critical("Could not retrieve response from Youtube API; returning...")
 
