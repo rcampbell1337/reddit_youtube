@@ -2,6 +2,7 @@ from dataclasses import dataclass
 from typing import List
 from MediaGeneration.Reddit.reddit_image_handler import store_post_images
 from decouple import config
+from logger import Logger
 import praw
 
 
@@ -37,12 +38,13 @@ class RedditApi:
         self.reddit_instance = self.connect_to_reddit_api()
         self.post_info = self.get_post_information()
 
-    @staticmethod
-    def connect_to_reddit_api() -> praw.Reddit:
+    def connect_to_reddit_api(self) -> praw.Reddit:
         """
         Connects to the Reddit API and returns an instance of a Reddit API Connection.
-        :return: An instance of a Reddit API Connection
+        :return: An instance of a Reddit API Connection.
         """
+        Logger.info(f"Entering {self.connect_to_reddit_api.__name__}")
+
         username: str = config("USER")
         password: str = config("PASSWORD")
         client: str = config("REDDIT_CLIENT")
@@ -56,6 +58,8 @@ class RedditApi:
             username=username,
         )
 
+        Logger.info(f"Successfully created an instance of the Reddit API.")
+
         return reddit
 
     def get_post_information(self) -> Post:
@@ -63,6 +67,8 @@ class RedditApi:
         Gets all of the information for a given Reddit post.
         :return: All of the information for a given Reddit post
         """
+        Logger.info(f"Entering {self.get_post_information.__name__}")
+
         submission = next(self.reddit_instance.subreddit(self.subreddit).top(time_filter="week"))
         comments = [Comment(author=comment.author,
                             body=comment.body,
@@ -75,20 +81,13 @@ class RedditApi:
                     title=submission.title,
                     comments=comments)
 
+        Logger.info(f"Successfully retrieved title and comments of Reddit Post.")
+
         return post
 
     def store_images_of_title_and_top_three_comments(self) -> None:
         """
         Stores the images of the top three Reddit Comments.
-        :return: None.
         """
-        store_post_images(self.get_reddit_page_url(self.post_info))
-
-    def get_reddit_page_url(self, post: Post) -> str:
-        """
-        Constructs a link to a given post on a subreddit.
-        :param post: The post.
-        :return: A link to a given post on a subreddit.
-        """
-        return f"https://www.reddit.com/r/{self.subreddit}/comments/{post.id}"
+        store_post_images(f"https://www.reddit.com/r/{self.subreddit}/comments/{self.post_info.id}")
 
