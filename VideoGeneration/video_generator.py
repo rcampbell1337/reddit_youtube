@@ -41,6 +41,8 @@ def generate_youtube_video():
     """
     clip = VideoFileClip(f"{MEDIA_URL}\\Videos\\video.mp4", audio=False)
 
+    clip = clip.resize((1080, 1920))
+
     image_audio_pairs = [
         ImageAudioPair(image=f"{MEDIA_URL}\\Images\\title.png",
                        audio=f"{MEDIA_URL}\\MP3s\\title.wav"),

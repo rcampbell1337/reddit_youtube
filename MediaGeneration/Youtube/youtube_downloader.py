@@ -7,7 +7,7 @@ def store_youtube_video() -> None:
     """
     Saves a given Youtube video.
     """
-    yt = YouTube(get_first_yt_video())
+    yt = YouTube(get_random_yt_video())
     youtube_video = yt.streams.filter(progressive=True, file_extension='mp4')\
                       .order_by('resolution')\
                       .desc()\
