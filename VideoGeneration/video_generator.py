@@ -84,7 +84,7 @@ def generate_youtube_video():
 
     start_delay = 15
     background_audio = AudioFileClip(song_choice).subclip(start_delay, int(final_cut.duration + start_delay))
-    background_audio = background_audio.fx(afx.volumex, 0.1)
+    background_audio = background_audio.fx(afx.volumex, 0.04)
     background_audio = audio_fadein(background_audio, 2)
     background_audio = audio_fadeout(background_audio, 2)
     final_audio = CompositeAudioClip([final_cut.audio, background_audio])
@@ -108,6 +108,6 @@ def get_all_music_files() -> list[str]:
     for path in os.listdir(dir_path):
         # check if current path is a file
         if os.path.isfile(os.path.join(dir_path, path)):
-            songs.append(path)
+            songs.append(dir_path + path)
 
     return songs
