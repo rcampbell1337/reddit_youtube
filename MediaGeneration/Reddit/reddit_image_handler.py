@@ -1,3 +1,4 @@
+import time
 from PIL import Image
 from selenium import webdriver
 from selenium.common import NoSuchElementException, TimeoutException
@@ -9,7 +10,6 @@ from selenium.webdriver.support.wait import WebDriverWait
 from webdriver_manager.chrome import ChromeDriverManager
 from definitions import MEDIA_URL
 from logger import Logger
-import time
 
 
 def store_post_images(url: str) -> None:

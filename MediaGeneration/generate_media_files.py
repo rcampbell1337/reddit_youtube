@@ -9,7 +9,7 @@ def generate_and_save_media_files(subreddit: str) -> Post:
     """
     ask_reddit_link = RedditApi(subreddit=subreddit)
     ask_reddit_link.store_images_of_title_and_top_three_comments()
-    store_youtube_video()
+    # store_youtube_video()
     pyttsx3_text_to_speech([ask_reddit_link.post_info.title])
     pyttsx3_text_to_speech([comment.body for comment in ask_reddit_link.post_info.comments])
     return ask_reddit_link.post_info

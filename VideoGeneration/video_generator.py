@@ -62,7 +62,7 @@ def generate_youtube_video():
     Logger.info(f"Resizing the main clip...")
 
     (w, h) = clip.size
-    cropped_clip = crop(clip, width=740, height=1280, x_center=w/2, y_center=h/2)
+    cropped_clip = crop(clip, width=1200, height=1500, x_center=w/2, y_center=h/2)
     resized_clip = cropped_clip.resize((1080, 1920)).subclip(15)
 
     Logger.info(f"Clip successfully resized.")

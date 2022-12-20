@@ -80,4 +80,4 @@ def upload_video_to_youtube(video_path: str, title: str, tags: List[str]) -> Non
     Logger.info(f"Uploaded video with ID: https://youtube.com/watch?v={uploaded_video.id}")
 
     # liking video
-    video.like()
+    uploaded_video.like()
