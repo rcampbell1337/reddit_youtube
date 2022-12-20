@@ -61,9 +61,7 @@ def generate_youtube_video():
 
     Logger.info(f"Resizing the main clip...")
 
-    (w, h) = clip.size
-    cropped_clip = crop(clip, width=1200, height=1500, x_center=w/2, y_center=h/2)
-    resized_clip = cropped_clip.resize((1080, 1920)).subclip(15)
+    resized_clip = clip.resize((1080, 1920)).subclip(15)
 
     Logger.info(f"Clip successfully resized.")
 
@@ -72,7 +70,7 @@ def generate_youtube_video():
                        audio=f"{MEDIA_URL}\\MP3s\\title.wav")
     ]
 
-    image_audio_pairs.extend([ImageAudioPair(image=f"{MEDIA_URL}\\Images\\{x}.png", audio=f"{MEDIA_URL}\\MP3s\\{x}.wav") for x in range(0, 2)])
+    image_audio_pairs.extend([ImageAudioPair(image=f"{MEDIA_URL}\\Images\\{x}.png", audio=f"{MEDIA_URL}\\MP3s\\{x}.wav") for x in range(0, 3)])
 
     video_clip_list = split_video_clips_into_mp3_sized_chunks(image_audio_pairs, resized_clip, outro)
 
