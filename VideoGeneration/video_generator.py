@@ -94,7 +94,11 @@ def generate_youtube_video():
 
     Logger.info("Saving file.")
 
-    final_cut.write_videofile(f"{ROOT_DIR}\\OutputFiles\\GeneratedVideos\\{date.today()}.mp4", codec='libx264')
+    output_destination = f"{ROOT_DIR}\\OutputFiles\\GeneratedVideos\\{date.today()}.mp4"
+
+    final_cut.write_videofile(output_destination, codec='libx264')
+
+    return output_destination
 
 def get_all_music_files() -> list[str]:
     """

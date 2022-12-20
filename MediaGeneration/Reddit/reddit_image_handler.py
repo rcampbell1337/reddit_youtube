@@ -74,8 +74,8 @@ def wait_for_element(driver: webdriver, xpath: str, click=False, multiple=False,
             return element 
         try:
             element.click()
-        except Exception as ex:
-            Logger.warning("Something went wrong when trying to click the element; Retrying...", ex.message)
+        except Exception:
+            Logger.warning("Something went wrong when trying to click the element; Retrying...")
             wait_for_element(driver, xpath, click, multiple, retries + 1)
 
     except NoSuchElementException and TimeoutException:
@@ -122,8 +122,8 @@ def crop_focused_area_and_save(x: int, width: int, height: int, path: str) -> No
     crop_rectangle: tuple(int, int, int, int) = (x, 49, width + x, height + 49)
     cropped_image: Image = image.crop(crop_rectangle)
     image_width: int = cropped_image.width
-    change_percentage = 1080 / image_width
-    resized_image = cropped_image.resize((1080, int(cropped_image.height * (change_percentage))))
+    change_percentage = 1000 / image_width
+    resized_image = cropped_image.resize((1000, int(cropped_image.height * (change_percentage))))
 
     Logger.info(f"Successfully cropped and resized image, attempting to save to: {path}")
 

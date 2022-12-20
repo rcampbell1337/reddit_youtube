@@ -1,7 +1,11 @@
+import os
+from typing import List
 import requests
 import random
 from decouple import config
 from logger import Logger
+from simple_youtube_api.Channel import Channel
+from simple_youtube_api.LocalVideo import LocalVideo
 
 def generate_youtube_api_url(params: list) -> str:
     """
@@ -36,8 +40,44 @@ def get_random_yt_video() -> str:
 
     return video_link
 
-def upload_video_to_youtube(video_path: str) -> None:
+def upload_video_to_youtube(video_path: str, title: str, tags: List[str]) -> None:
     """
     Uploads a generated video to Youtube.
-    :param: video_path The path to the generated youtube video.
+    :param: video_path The path to the generated Youtube video.
+    :param: title The title of the video.
+    :param: tags The tags of the video.
     """
+    Logger.info(f"Entering {upload_video_to_youtube.__name__}")
+
+    # loggin into the channel
+    channel = Channel()
+    channel.login(os.path.abspath(os.path.join(os.path.dirname(__file__), "Secrets/client-secrets.json")), 
+                  os.path.abspath(os.path.join(os.path.dirname(__file__), "Secrets/credentials.storage")))
+
+    Logger.info("Collected credentials, adding all metadata...")
+
+    # setting up the video that is going to be uploaded
+    video = LocalVideo(file_path=video_path)
+
+    # setting snippet
+    video.set_title(title)
+    video.set_description(f"What do you think? {', '.join([f'#{tag}' for tag in tags])}")
+    video.set_tags(tags)
+    video.set_category("gaming")
+    video.set_default_language("en-US")
+
+    # setting status
+    video.set_embeddable(True)
+    video.set_license("creativeCommon")
+    video.set_privacy_status("public")
+    video.set_public_stats_viewable(True)
+
+    Logger.info("Uploading video to youtube...")
+
+    # uploading video and printing the results
+    uploaded_video = channel.upload_video(video)
+
+    Logger.info(f"Uploaded video with ID: https://youtube.com/watch?v={uploaded_video.id}")
+
+    # liking video
+    video.like()
