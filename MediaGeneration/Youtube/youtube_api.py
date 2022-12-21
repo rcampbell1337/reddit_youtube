@@ -39,6 +39,7 @@ def get_random_yt_video() -> str:
     Logger.info(f"Formatted API response into a link for download.")
 
     return video_link
+    
 
 def upload_video_to_youtube(video_path: str, title: str, tags: List[str]) -> None:
     """

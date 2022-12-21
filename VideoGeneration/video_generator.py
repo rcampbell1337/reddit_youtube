@@ -19,7 +19,7 @@ class ImageAudioPair:
     audio: str
 
 
-def split_video_clips_into_mp3_sized_chunks(image_audio_pair: List[ImageAudioPair], full_clip: VideoFileClip, outro: VideoFileClip) -> list[CompositeVideoClip]:
+def split_video_clips_into_mp3_sized_chunks(image_audio_pair: List[ImageAudioPair], full_clip: VideoFileClip) -> list[CompositeVideoClip]:
     """
     Splits all of the generated video clips into the size of the given MP3 Files.
     :param image_audio_pair: A given video clip.
@@ -72,19 +72,20 @@ def generate_youtube_video():
 
     image_audio_pairs.extend([ImageAudioPair(image=f"{MEDIA_URL}\\Images\\{x}.png", audio=f"{MEDIA_URL}\\MP3s\\{x}.wav") for x in range(0, 3)])
 
-    video_clip_list = split_video_clips_into_mp3_sized_chunks(image_audio_pairs, resized_clip, outro)
+    video_clip_list = split_video_clips_into_mp3_sized_chunks(image_audio_pairs, resized_clip)
 
     Logger.info(f"Attempting to concatenate videos...")
 
     final_cut = concatenate_videoclips(video_clip_list)
     final_cut = concatenate_videoclips([final_cut, outro])
+    final_cut.audio = final_cut.audio.fx(afx.volumex, 4)
 
     song_choice = choice(get_all_music_files())
     Logger.info(f"Attempting to add background music with song: {song_choice}")
 
     start_delay = 15
     background_audio = AudioFileClip(song_choice).subclip(start_delay, int(final_cut.duration + start_delay))
-    background_audio = background_audio.fx(afx.volumex, 0.04)
+    background_audio = background_audio.fx(afx.volumex, 0.01)
     background_audio = audio_fadein(background_audio, 2)
     background_audio = audio_fadeout(background_audio, 2)
     final_audio = CompositeAudioClip([final_cut.audio, background_audio])
@@ -94,9 +95,9 @@ def generate_youtube_video():
 
     output_destination = f"{ROOT_DIR}\\OutputFiles\\GeneratedVideos\\{date.today()}.mp4"
 
-    if final_cut.duration > 59:
+    if final_cut.duration > 59.9:
         Logger.info(f"Speeding up clip, before speedup: {final_cut.duration}")
-        speedup_to_fit_minute = (final_cut.duration / 59)
+        speedup_to_fit_minute = (final_cut.duration / 59.9)
         final_cut = final_cut.fx(vfx.speedx, speedup_to_fit_minute)
         Logger.info(f"Final cut new duration: {final_cut.duration}, sped up by: {speedup_to_fit_minute * 100}%")
 
