@@ -94,6 +94,12 @@ def generate_youtube_video():
 
     output_destination = f"{ROOT_DIR}\\OutputFiles\\GeneratedVideos\\{date.today()}.mp4"
 
+    if final_cut.duration > 59:
+        Logger.info(f"Speeding up clip, before speedup: {final_cut.duration}")
+        speedup_to_fit_minute = (final_cut.duration / 59)
+        final_cut = final_cut.fx(vfx.speedx, speedup_to_fit_minute)
+        Logger.info(f"Final cut new duration: {final_cut.duration}, sped up by: {speedup_to_fit_minute * 100}%")
+
     final_cut.write_videofile(output_destination, codec='libx264')
 
     return output_destination

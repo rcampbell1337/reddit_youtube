@@ -6,6 +6,6 @@ from MediaGeneration.Reddit.reddit_api import Post
 if __name__ == "__main__":
     post_data: Post = generate_and_save_media_files("askreddit")
     video_file = generate_youtube_video()
-    tags = ["askreddit", "reddit", "smash", "interesting"]
+    tags = ["askreddit", "reddit", "interesting"]
     tags.extend([word for word in post_data.title.split()])
     upload_video_to_youtube(video_file, post_data.title, tags)
