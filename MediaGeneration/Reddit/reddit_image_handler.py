@@ -21,9 +21,9 @@ def store_post_images(url: str) -> None:
 
     driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
     driver.get(url)
-    driver.set_window_size(600, 800)
+    driver.set_window_size(700, 800)
 
-    Logger.info(f"Attempting to remove cookies etc...")
+    Logger.info(f"Attempting to remove cookies etc...") 
 
     wait_for_element(driver=driver,
                      xpath='//*[@id="AppRouter-main-content"]/div/div[1]/div/div/div[2]/button',
@@ -32,6 +32,10 @@ def store_post_images(url: str) -> None:
     wait_for_element(driver=driver,
                      xpath='/html/body/div[1]/div/div[2]/div[2]/div/div/div/div[2]/div[3]/div[1]/div[2]'
                            '/div[1]/div/div[5]/div/div',
+                     click=True)
+
+    wait_for_element(driver=driver,
+                     xpath='//*[@id="SHORTCUT_FOCUSABLE_DIV"]/div[3]/div/section/div/section[2]/section[1]/form/button',
                      click=True)
 
     Logger.info("Attempting to collect title and comments from: {url}")

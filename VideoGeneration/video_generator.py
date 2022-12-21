@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from datetime import date
-from random import choice
+from random import choice, randint
 from typing import List
 from moviepy.editor import *
 from moviepy.video.fx.all import crop
@@ -61,7 +61,7 @@ def generate_youtube_video():
 
     Logger.info(f"Resizing the main clip...")
 
-    resized_clip = clip.resize((1080, 1920)).subclip(15)
+    resized_clip = clip.resize((1080, 1920)).subclip(50)
 
     Logger.info(f"Clip successfully resized.")
 
